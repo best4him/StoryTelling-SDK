@@ -61,7 +61,7 @@ public class ScreenSettings {
 //		 windowHeight = Scale(dm.heightPixels,1/dpScaleFactor);
 		//
 		windowWidth = dm.widthPixels;
-		windowHeight = dm.heightPixels;
+		windowHeight = dm.heightPixels-3;
 		scaleFactor = (float) ((float) windowHeight / height);
 	
 		// compute our frame

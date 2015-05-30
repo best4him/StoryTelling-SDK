@@ -20,6 +20,8 @@ import com.andrei.storytelling.customviews.CustomImageButton;
 import com.andrei.storytelling.models.Book;
 import com.andrei.storytelling.models.ButtonModel;
 import com.andrei.storytelling.models.NavigationModel;
+import com.andrei.storytelling.models.Page;
+import com.andrei.storytelling.music.MusicPlayer;
 import com.andrei.storytelling.util.Tools;
 
 public class PagesActivity extends FragmentActivity   {
@@ -28,10 +30,12 @@ public class PagesActivity extends FragmentActivity   {
 	private ViewPager mPager;
 	private RelativeLayout container;
 	private HashMap<Integer, PageFragment> pageFragments = new HashMap<>();
-	
+	private Page currentPage;
+	private MusicPlayer mPlayer;
 	private final int numberOfFragments = BookController.getInstance()
 			.getNumberOfPage();
 	private MyPagerAdapter myPagerAdapter;
+
 
 	@Override
 	protected void onCreate(Bundle arg0) {
@@ -44,10 +48,13 @@ public class PagesActivity extends FragmentActivity   {
 
 		setContentView(R.layout.page_activity_layout);
 		container = (RelativeLayout) findViewById(R.id.page_activity_container);
+		container.setBackground(Tools.getDrawable(this,
+				"bg"));
 		mPager = (ViewPager) findViewById(R.id.viewPager);
 		mPager.setOffscreenPageLimit(0);
 		myPagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
 		mPager.setAdapter(myPagerAdapter);
+		playBackgroundSound(0);
 		RelativeLayout frame = new RelativeLayout(this);
 		NavigationModel nav = BookController.getInstance().getNav();
 		float scaleFactor = ScreenSettings.getScaleFactor();
@@ -95,6 +102,8 @@ public class PagesActivity extends FragmentActivity   {
 
 			@Override
 			public void onPageSelected(int position) {
+				
+				playBackgroundSound(position);
 
 				FragmentLifecycle fragmentToShow = (FragmentLifecycle) myPagerAdapter
 						.getItem(position);
@@ -106,6 +115,8 @@ public class PagesActivity extends FragmentActivity   {
 
 				currentPosition = position;
 			}
+
+
 
 			@Override
 			public void onPageScrolled(int position, float positionOffset,
@@ -119,7 +130,13 @@ public class PagesActivity extends FragmentActivity   {
 			}
 		});
 	}
-
+	@Override
+	protected void onPause() {
+		super.onPause();
+		if (mPlayer != null) {
+			mPlayer.release();
+		}
+	}
 	private class MyPagerAdapter extends FragmentPagerAdapter {
 
 		public MyPagerAdapter(FragmentManager fm) {
@@ -166,7 +183,20 @@ public class PagesActivity extends FragmentActivity   {
 		}
 	}
 
-	
+	private void playBackgroundSound(int position) {
+		if (mPlayer != null) {
+			mPlayer.release();
+		}
+		currentPage = BookController.getInstance().getPages().get(position);
+		if (currentPage.getTextSound() != null
+				&& currentPage.getTextSound().length() > 0) {
+			mPlayer = MusicPlayer.create(PagesActivity.this,
+					currentPage.getTextSound());
+			
+				mPlayer.play();
+
+		}
+	}
 	public void nextButtonPressed() {
 		mPager.setCurrentItem(getItem(+1), true);
 	}

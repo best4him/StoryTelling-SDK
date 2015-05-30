@@ -7,6 +7,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import com.andrei.storytelling.controllers.BookController;
@@ -33,14 +36,16 @@ public class PageFragment extends Fragment implements FragmentLifecycle {
 
 		position = Integer.parseInt((getArguments().getString("position")));
 		currentPage = BookController.getInstance().getPages().get(position);
-
+		System.out.println("ttt" + "onReusmeFragment: " + position);
 		// add sound
-		if (currentPage.getTextSound() != null
-				&& currentPage.getTextSound().length() > 1) {
-			mPlayer = MusicPlayer.create(getActivity(),
-					currentPage.getTextSound());
-
-		}
+//		if (currentPage.getTextSound() != null
+//				&& currentPage.getTextSound().length() > 0) {
+//			mPlayer = MusicPlayer.create(getActivity(),
+//					currentPage.getTextSound());
+//			if (position == 0)
+//				mPlayer.play();
+//
+//		}
 
 		RelativeLayout frame = getFrame(position);
 		// RelativeLayout frame = new RelativeLayout(getActivity());
@@ -57,7 +62,7 @@ public class PageFragment extends Fragment implements FragmentLifecycle {
 	}
 
 	public static PageFragment newInstance(int pos) {
-
+		
 		PageFragment pageFragment = new PageFragment();
 		Bundle b = new Bundle();
 		b.putString("position", Integer.toString(pos));
@@ -109,15 +114,22 @@ public class PageFragment extends Fragment implements FragmentLifecycle {
 
 	@Override
 	public void onPause() {
+		System.out.println("ttt" + "onPause: " +position);
 		super.onPause();
-		releaseResources();
+		if (mPlayer != null)
+			mPlayer.pause();
+//		releaseResources();
 	}
-
+@Override
+public void onDestroy() {
+	super.onDestroy();
+	releaseResources();
+}
 	@Override
 	public void onPauseFragment() {
-
+		System.out.println("ttt" + "onPauseFragment: " + position);
 		onPause();
-		releaseResources();
+		
 	}
 
 	private void releaseResources() {
@@ -133,15 +145,18 @@ public class PageFragment extends Fragment implements FragmentLifecycle {
 
 	@Override
 	public void onResumeFragment() {
+		System.out.println("ttt" + "onReusmeFragment: " + position);
 		if (mPlayer != null) {
+			
 			mPlayer.play();
+		} else {
+			System.out.println("ttt pe else");
 		}
 	}
 
 	public interface OnButtonPressListener {
 
 		public void nextButtonPressed();
-
 		public void previousButtonPressed();
 
 	}

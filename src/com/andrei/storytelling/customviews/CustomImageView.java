@@ -27,10 +27,7 @@ public class CustomImageView extends ImageView {
 		this.sprite = sprite;
 		this.context = context;
 		this.sounds = sounds;
-       	if (sprite.getSounds() != null) {
-    		
-    		sounds.addSound(300, Tools.getSong(context, sprite.getSounds().getName()));
-       	}
+
 	}
 	
 	@Override
@@ -74,21 +71,25 @@ public class CustomImageView extends ImageView {
         		this.startAnimation(animationSet);
         		
         	}
+			
 			if (sprite.getdAnimation() != null ) {
 				this.post(new Starter() );
 			}
-			System.out.println("qqq" + sprite.getdAnimation().getTotalDuration());
+			
 			mAnimationHandler = new Handler();
 			mAnimationHandler.postDelayed(new Runnable() {
 				
 				@Override
 				public void run() {
 					setBackground(sprite.getdAnimation());
+					CustomImageView.this.post(new Starter() );
 				}
+				
 			}, sprite.getdAnimation().getTotalDuration() );
             break;
         }
     }
+		
     return true;
 	}
 	
@@ -96,14 +97,16 @@ public class CustomImageView extends ImageView {
 
 		@Override
 		public void run() {
+//			sprite.getdAnimation().stop();
+//			sprite.getdAnimation().start();
 			
 			if (!sprite.getdAnimation().isRunning()) {
 				sprite.getdAnimation().stop();
-				sprite.getdAnimation().start();
-			} else {
-				sprite.getdAnimation().stop();
-			}
-			
+				sprite.getdAnimation().start();}
+//			} else {
+//				sprite.getdAnimation().stop();
+//			}
+//			
 		}
 	}
 }

@@ -49,7 +49,14 @@ public class MusicPlayer {
 			play();
 		}
 	}
+	public void pause () {
+		if (player != null) {
 
+			if (player.isPlaying()) {
+				player.pause();
+			}
+		}
+	}
 	public void release() {
 		
 		if (player != null) {
@@ -64,10 +71,11 @@ public class MusicPlayer {
 	 *  from where it was paused. If playback had been stopped, or never started before, playback will start at the beginning.
 	 */
 	public  void play() {
-
+		System.out.println("ttt player: " + player);
 		if (player == null) {
 			return;
 		}
+		player.seekTo(0);
 		player.start();
 	}
 	

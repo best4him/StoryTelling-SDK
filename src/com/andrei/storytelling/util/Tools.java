@@ -20,15 +20,10 @@ public class Tools {
 	public static Drawable getDrawable(Context context, String resource_name) {
 
 		try {
-			Calendar cal = Calendar.getInstance();
 			
 			int resId = context.getResources().getIdentifier(resource_name, "drawable", context.getPackageName());
-			System.out.println("rrr1: " + (Calendar.getInstance().getTimeInMillis() - cal.getTimeInMillis()));
-			
 			if (resId != 0) {
 				Drawable drawable = context.getResources().getDrawable(resId);
-				
-				System.out.println("rrr2 : " +resource_name+ (Calendar.getInstance().getTimeInMillis() - cal.getTimeInMillis()));
 				return drawable;
 			}
 		} catch (Exception e) {
