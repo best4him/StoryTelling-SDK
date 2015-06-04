@@ -7,6 +7,7 @@ import java.util.Calendar;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
+import android.widget.RelativeLayout;
 
 public class Tools {
 	/**
@@ -131,5 +132,15 @@ public class Tools {
 
 		return 0;
 	}
-
+	public static RelativeLayout.LayoutParams getLayoutParams(int width,int height,int xPosition, int yPosition, float scaleFactor) {
+		RelativeLayout.LayoutParams boxParams = new RelativeLayout.LayoutParams(
+				Tools.Scale(width, scaleFactor),
+				Tools.Scale(height, scaleFactor));
+		boxParams.leftMargin = Tools.Scale(xPosition,
+				scaleFactor);
+		boxParams.topMargin = Tools.Scale(yPosition,
+				scaleFactor);
+		
+		return boxParams;
+	}
 }

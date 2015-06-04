@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" 
+    android:background="@color/material_deep_teal_200">
+
+    <TextView
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:background="#76E8DE"
+        android:textSize="10sp"
+        android:fontFamily="sans-serif-medium"
+        android:text="This is my something beautiful but it&apos;s not finished yet...sry my friend"
+        android:textColor="#000000" />
+
+</RelativeLayout>

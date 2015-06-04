@@ -1,9 +1,17 @@
 package com.andrei.storytelling;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.Activity;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,11 +19,14 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.andrei.storytelling.controllers.BookController;
 import com.andrei.storytelling.customviews.CustomImageView;
 import com.andrei.storytelling.models.Page;
 import com.andrei.storytelling.models.Sprite;
+import com.andrei.storytelling.models.TextBoxItem;
+import com.andrei.storytelling.models.TextBoxModel;
 import com.andrei.storytelling.music.FXPlayer;
 import com.andrei.storytelling.music.MusicPlayer;
 import com.andrei.storytelling.util.Tools;
@@ -27,7 +38,11 @@ public class PageFragment extends Fragment implements FragmentLifecycle {
 	private Page currentPage;
 	private MusicPlayer mPlayer;
 	private OnButtonPressListener mCallback;
-
+	private TextView mTextView;
+	private TextBoxModel myTextBox;
+	private List<TextBoxItem> tbItems;
+	private  Handler textBoxHandler = new Handler();
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater,
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -89,13 +104,6 @@ public class PageFragment extends Fragment implements FragmentLifecycle {
 			
 			image.setImageDrawable(Tools.getDrawable(getActivity(), sprite
 					.getImage().getPath()));
-			RelativeLayout.LayoutParams image2Params = new RelativeLayout.LayoutParams(
-					Tools.Scale(sprite.getImage().getWidth(), scaleFactor),
-					Tools.Scale(sprite.getImage().getHeight(), scaleFactor));
-			image2Params.leftMargin = Tools.Scale(sprite.getxPosition(),
-					scaleFactor);
-			image2Params.topMargin = Tools.Scale(sprite.getyPosition(),
-					scaleFactor);
 
 			if (sprite.getImage().getScaleType() != null) {
 
@@ -107,14 +115,65 @@ public class PageFragment extends Fragment implements FragmentLifecycle {
 				image.setBackground(sprite.getdAnimation());
 			}
 			
-			frame.addView(image, image2Params);
+			frame.addView(image, sprite.getParams(scaleFactor));
 		}
+		
+		myTextBox = currentPage.getTextBoxes();
+		if ( myTextBox != null) {
+			mTextView = new TextView(getActivity());
+			
+			GradientDrawable shape = new GradientDrawable();
+			shape.mutate();
+			System.out.println("qqq" + myTextBox.getTextSize());
+			shape.setCornerRadius(myTextBox.getRadius());
+			shape.setColor(Color.parseColor(myTextBox.getBackgroundColorWithOpacity()));
+			mTextView.setBackground(shape);
+			
+//			mTextView.setBackgroundColor();
+			mTextView.setTextColor(Color.parseColor(myTextBox.getTextColor()));
+			mTextView.setTextSize(myTextBox.getTextSize());
+			mTextView.setGravity(Gravity.CENTER_HORIZONTAL);
+			
+			if (myTextBox.getExternalFont()!= null && !myTextBox.getExternalFont().equals("")) {
+				Typeface type = Typeface.createFromAsset(getActivity().getAssets(), myTextBox.getExternalFont());
+				mTextView.setTypeface(type);
+			}
+			tbItems = new ArrayList<>(myTextBox.getTbItems());
+			textBoxHandler.post(runnable);
+			
+			frame.addView(mTextView, myTextBox.getParams(scaleFactor));
+		}
+		
 		return frame;
 	}
-
+	
+	
+	private Runnable runnable = new Runnable() {
+		
+		@Override
+		public void run() {
+			
+			if (tbItems.size() > 0) {
+				if (tbItems.get(0).getText().equals("")){
+					mTextView.animate().alpha(0.0f).setDuration(myTextBox.getAnimationDuration());
+					mTextView.setVisibility(View.GONE);
+				} else {
+					mTextView.setVisibility(View.VISIBLE);
+					mTextView.animate().alpha(1.0f).setDuration(myTextBox.getAnimationDuration());
+					mTextView.setText(tbItems.get(0).getText());
+				}
+				
+				textBoxHandler.postDelayed(this, tbItems.get(0).getDuration());
+				tbItems.remove(0);
+			} else {
+				mTextView.animate().alpha(0.0f).setDuration(myTextBox.getAnimationDuration());
+//				mTextView.setVisibility(View.GONE);
+			}
+		}
+	};
 	@Override
 	public void onPause() {
-		System.out.println("ttt" + "onPause: " +position);
+		
 		super.onPause();
 		if (mPlayer != null)
 			mPlayer.pause();
@@ -127,7 +186,7 @@ public void onDestroy() {
 }
 	@Override
 	public void onPauseFragment() {
-		System.out.println("ttt" + "onPauseFragment: " + position);
+
 		onPause();
 		
 	}
@@ -145,7 +204,6 @@ public void onDestroy() {
 
 	@Override
 	public void onResumeFragment() {
-		System.out.println("ttt" + "onReusmeFragment: " + position);
 		if (mPlayer != null) {
 			
 			mPlayer.play();

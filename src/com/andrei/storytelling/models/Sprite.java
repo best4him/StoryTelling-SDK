@@ -7,12 +7,14 @@ import org.json.JSONObject;
 
 import android.graphics.drawable.AnimationDrawable;
 import android.view.animation.Animation;
+import android.widget.RelativeLayout;
 
 import com.andrei.storytelling.models.animations.FrameAnimation;
 import com.andrei.storytelling.models.animations.MyAlphaAnimation;
 import com.andrei.storytelling.models.animations.MyRotateAnimation;
 import com.andrei.storytelling.models.animations.MyScaleAnimation;
 import com.andrei.storytelling.models.animations.MyTranslateAnimation;
+import com.andrei.storytelling.util.Tools;
 
 
 public class Sprite {
@@ -28,7 +30,10 @@ public class Sprite {
 	public FrameAnimation getdAnimation() {
 		return dAnimation;
 	}
-
+	
+	public RelativeLayout.LayoutParams getParams(float scaleFactor) {
+		return Tools.getLayoutParams(image.getWidth(), image.getWidth(), xPosition, yPosition, scaleFactor);
+	}
 	public int getSoundId() {
 		return soundId;
 	}

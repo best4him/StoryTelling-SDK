@@ -3,6 +3,7 @@ package com.andrei.storytelling;
 import java.util.HashMap;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -16,7 +17,9 @@ import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
 import com.andrei.storytelling.controllers.BookController;
+import com.andrei.storytelling.customviews.AlphaPageTransformer;
 import com.andrei.storytelling.customviews.CustomImageButton;
+import com.andrei.storytelling.customviews.NonSwipeableViewPager;
 import com.andrei.storytelling.models.Book;
 import com.andrei.storytelling.models.ButtonModel;
 import com.andrei.storytelling.models.NavigationModel;
@@ -27,7 +30,7 @@ import com.andrei.storytelling.util.Tools;
 public class PagesActivity extends FragmentActivity   {
 
 	protected Book myBook;
-	private ViewPager mPager;
+	private NonSwipeableViewPager mPager;
 	private RelativeLayout container;
 	private HashMap<Integer, PageFragment> pageFragments = new HashMap<>();
 	private Page currentPage;
@@ -38,8 +41,8 @@ public class PagesActivity extends FragmentActivity   {
 
 
 	@Override
-	protected void onCreate(Bundle arg0) {
-		super.onCreate(arg0);
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
 		// set fullscreen
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -48,18 +51,44 @@ public class PagesActivity extends FragmentActivity   {
 
 		setContentView(R.layout.page_activity_layout);
 		container = (RelativeLayout) findViewById(R.id.page_activity_container);
-		container.setBackground(Tools.getDrawable(this,
-				"bg"));
-		mPager = (ViewPager) findViewById(R.id.viewPager);
+		
+		container.setBackgroundColor(Color.BLACK);
+		
+		//get extra
+		int optionButton;
+		
+		if (savedInstanceState == null) {
+			Bundle extras = getIntent().getExtras();
+			
+			if (extras == null) {
+				optionButton = -1;
+			} else {
+			
+				optionButton = extras.getInt("action");
+			}
+		} else {
+			
+			optionButton = Integer.parseInt((String)savedInstanceState.getSerializable("action"));
+		}
+		
+		
+		mPager = (NonSwipeableViewPager) findViewById(R.id.viewPager);
+		mPager.setPageTransformer(true, new AlphaPageTransformer());
+		mPager.setPageMargin(0);
+		mPager.setScrollDurationFactor(15);
 		mPager.setOffscreenPageLimit(0);
 		myPagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
 		mPager.setAdapter(myPagerAdapter);
+		
+		
 		playBackgroundSound(0);
 		RelativeLayout frame = new RelativeLayout(this);
 		NavigationModel nav = BookController.getInstance().getNav();
 		float scaleFactor = ScreenSettings.getScaleFactor();
 		
-		if (nav != null) {
+		
+		
+		if (nav != null && optionButton != 3) {
 			
 			for (final ButtonModel option : nav.getButtons()) {
 
@@ -70,9 +99,6 @@ public class PagesActivity extends FragmentActivity   {
 				image.setImageDrawable(Tools.getDrawable(this, option
 						.getImage().getPath()));
 
-				final Intent intent = new Intent(this,
-						PagesActivity.class);
-				intent.putExtra("action", option.getAction());
 				image.setOnClickListener(new OnClickListener() {
 
 					@Override

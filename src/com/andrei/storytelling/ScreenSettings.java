@@ -61,16 +61,18 @@ public class ScreenSettings {
 //		 windowHeight = Scale(dm.heightPixels,1/dpScaleFactor);
 		//
 		windowWidth = dm.widthPixels;
-		windowHeight = dm.heightPixels-3;
+		windowHeight = dm.heightPixels;
 		scaleFactor = (float) ((float) windowHeight / height);
 	
 		// compute our frame
 		scaledWidth = (int) (width * scaleFactor);
+//		scaledWidth = windowWidth;
 		scaledHeight = windowHeight;
 
 		// compute padding for our frame inside the total screen size
 		paddingY = 0;
-		paddingX = (windowWidth - scaledWidth) / 2;
+		paddingX = (windowWidth - scaledWidth)/2 ;
+//		paddingX = 0;
 	}
 	
 	public static RelativeLayout.LayoutParams getFrameParams () {

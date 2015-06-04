@@ -37,18 +37,20 @@ public class MenuFragment  extends Fragment{
 		
 //		int length = menu.getOptions().size();
 		float scaleFactor = ScreenSettings.getScaleFactor();
-		for (ButtonModel option :  menu.getOptions()) {
+		for (final ButtonModel option :  menu.getOptions()) {
 			
 			final CustomImageButton image = new CustomImageButton(getActivity(), Tools.Scale(option.getImage().getWidth(), scaleFactor), Tools.Scale(option.getImage().getHeight(), scaleFactor));
 			image.setImageDrawable(Tools.getDrawable(getActivity(), option.getImage().getPath()));
 			
 			
 			final Intent intent = new Intent(getActivity(), PagesActivity.class);
+	
 				intent.putExtra("action", option.getAction());
 			image.setOnClickListener(new OnClickListener() {
 				
 				@Override
 				public void onClick(View v) {
+					
 					startActivity(intent);
 				}
 			});

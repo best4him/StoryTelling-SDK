@@ -15,6 +15,12 @@ public class Page {
 
 	private String background;
 	private List<Sprite> sprites;
+	private TextBoxModel textBoxes;
+	
+	public TextBoxModel getTextBoxes() {
+		return textBoxes;
+	}
+	
 	private String textSound;
 	public static int  contor = 0;
 	private Page( ) {}
@@ -71,7 +77,10 @@ public class Page {
 		Page page = new Page();
 		page.background = object.optString("background");
 		page.textSound = object.optString("sound");
+		
 		JSONArray spritesJson = object.optJSONArray("sprites");
+		// text Box json
+		JSONObject textBoxesJson = object.optJSONObject("text_box");
 		
 		if (spritesJson != null) {
 			List<Sprite> sprites = new ArrayList<>();
@@ -81,6 +90,12 @@ public class Page {
 			page.sprites = sprites;
 		} else {
 			page.sprites = new ArrayList<>();
+		}
+		
+		if (textBoxesJson != null) {	
+			page.textBoxes = TextBoxModel.getTextBoxModel(textBoxesJson);			
+		} else {
+//			page.textBoxes =TextBoxModel.noBox();
 		}
 		return page;
 	}
