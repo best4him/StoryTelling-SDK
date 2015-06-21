@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Calendar;
 
+import com.andrei.storytelling.language.LanguageController;
+
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
@@ -19,13 +21,29 @@ public class Tools {
 	 * @return the Drawable from resource file
 	 */
 	public static Drawable getDrawable(Context context, String resource_name) {
-
+		
 		try {
 			
-			int resId = context.getResources().getIdentifier(resource_name, "drawable", context.getPackageName());
-			if (resId != 0) {
-				Drawable drawable = context.getResources().getDrawable(resId);
+			//first try to find a drawable for a specific language
+			
+			
+			String rsName = LanguageController.INSTANCE.getLanguages().get(0).getSt()+"_"+resource_name;
+			
+			int lgResId = context.getResources().getIdentifier(rsName, "drawable", context.getPackageName());
+			
+			Drawable drawable;
+			if (lgResId != 0 && (drawable = context.getResources().getDrawable(lgResId)) != null ) {
+				 
 				return drawable;
+			}else {
+				
+			
+				//get default resource
+				int resId = context.getResources().getIdentifier(resource_name, "drawable", context.getPackageName());
+				if (resId != 0) {
+					drawable = context.getResources().getDrawable(resId);
+					return drawable;
+				} 
 			}
 		} catch (Exception e) {
 			Log.e("ll", "getDrawable - resource_name: " + resource_name);
@@ -120,8 +138,14 @@ public class Tools {
 	public static int getSong(Context context, String resource_name) {
 
 		try {
+			
+			String rsName = LanguageController.INSTANCE.getLanguages().get(0).getSt()+"_"+resource_name;	
+			int lgResId = context.getResources().getIdentifier(rsName, "raw", context.getPackageName());
+			
+			if (lgResId != 0)
+				return lgResId;
+			
 			int resId = context.getResources().getIdentifier(resource_name, "raw", context.getPackageName());
-
 			return resId;
 
 		} catch (Exception e) {

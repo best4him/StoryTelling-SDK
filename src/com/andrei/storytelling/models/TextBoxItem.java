@@ -2,12 +2,16 @@ package com.andrei.storytelling.models;
 
 import org.json.JSONObject;
 
+import com.andrei.storytelling.language.LanguageController;
+
 public class TextBoxItem  {
 	
 	private int xPosition;
 	private int yPosition;
 	private int duration;
 	private String text;
+	private String id;
+	
 	public static TextBoxItem noBox() {
 		return null;
 	}
@@ -28,6 +32,9 @@ public class TextBoxItem  {
 	}
 	
 
+	public String getId() {
+		return id;
+	}
 	/**
 	 * This method returns a textBoxModel object from a Json Object 
 	 * @param textBoxModel a json object that contains the textBox attributes like position or duration
@@ -39,8 +46,12 @@ public class TextBoxItem  {
 		tbm.xPosition = textBoxModel.optInt("xPosition");
 		tbm.yPosition = textBoxModel.optInt("yPosition");
 		tbm.duration = textBoxModel.optInt("duration");
-		tbm.text = textBoxModel.optString("text");
+		tbm.id = textBoxModel.optString("id");
 		
+		//get the first language, the default languages
+
+
+		tbm.text = LanguageController.INSTANCE.getLanguages().get(0).getValues().get(tbm.id);
 		return tbm;
 	}
 }

@@ -13,8 +13,12 @@ import android.widget.RelativeLayout;
 
 import com.andrei.storytelling.controllers.BookController;
 import com.andrei.storytelling.customviews.CustomImageButton;
+import com.andrei.storytelling.language.LanguageController;
+import com.andrei.storytelling.language.LanguageDialog;
 import com.andrei.storytelling.models.Menu;
 import com.andrei.storytelling.models.ButtonModel;
+import com.andrei.storytelling.pages.PagesActivity;
+import com.andrei.storytelling.util.ReadingType;
 import com.andrei.storytelling.util.Tools;
 
 public class MenuFragment  extends Fragment{
@@ -40,18 +44,38 @@ public class MenuFragment  extends Fragment{
 		for (final ButtonModel option :  menu.getOptions()) {
 			
 			final CustomImageButton image = new CustomImageButton(getActivity(), Tools.Scale(option.getImage().getWidth(), scaleFactor), Tools.Scale(option.getImage().getHeight(), scaleFactor));
-			image.setImageDrawable(Tools.getDrawable(getActivity(), option.getImage().getPath()));
+			
+			if ( option.getAction() < 4) {
+				image.setImageDrawable(Tools.getDrawable(getActivity(), option.getImage().getPath()));
+			} else if (option.getAction() == 4) {
+				
+				image.setImageDrawable(Tools.getDrawable(getActivity(),LanguageController.INSTANCE.getLanguages().get(0).getFlag()));
+			}
 			
 			
 			final Intent intent = new Intent(getActivity(), PagesActivity.class);
 	
-				intent.putExtra("action", option.getAction());
+			intent.putExtra("action", option.getAction());
 			image.setOnClickListener(new OnClickListener() {
 				
 				@Override
 				public void onClick(View v) {
+					ReadingType.userChoice = option.getAction();
+					switch (option.getAction()) {
+					case 1:
+					case 2:
+					case 3:
+						startActivity(intent);   // 1,2,3 represents the play mode 
+						break;
+					case 4:		//select language button
+						LanguageDialog dialog  = new LanguageDialog(getActivity());
+						dialog.show();
+						
+						break;
+					default:
+						break;
+					}	
 					
-					startActivity(intent);
 				}
 			});
 			frame.addView(image, option.getParams());

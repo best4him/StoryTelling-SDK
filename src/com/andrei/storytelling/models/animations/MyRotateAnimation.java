@@ -58,7 +58,6 @@ public class MyRotateAnimation extends RotateAnimation {
 			
 			pivotXType = coordinates.optInt("pivotXType");
 			pivotYType = coordinates.optInt("pivotYType");
-			System.out.println("ppp: " + pivotXType + "--" + pivotYType);
 			
 			
 		}

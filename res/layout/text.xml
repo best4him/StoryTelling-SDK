@@ -3,17 +3,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" 
-    android:background="@color/material_deep_teal_200">
+    android:background="#000000">
 
-    <TextView
-        android:layout_width="400dp"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:background="#76E8DE"
-        android:textSize="10sp"
-        android:fontFamily="sans-serif-medium"
-        android:text="This is my something beautiful but it&apos;s not finished yet...sry my friend"
-        android:textColor="#000000" />
+    <RelativeLayout
+   	    android:id="@+id/content"
+   	    android:layout_width="match_parent"
+   	    android:layout_height="match_parent"/>
+    
+   	<ImageView
+   	    android:id="@+id/leftImage"
+   	    android:layout_width="20dp"
+   	    android:rotation="180"
+   	    android:layout_height="match_parent"
+   	    android:src="@drawable/bgr"/>
+   	
+   	
+   	
+   	<ImageView
+   	    android:id="@+id/rightImage"
+   	    android:layout_width="20dp"
+   	    android:layout_height="match_parent"
+   	    android:layout_alignParentRight="true"
+   	    android:src="@drawable/bgr"/>
 
 </RelativeLayout>

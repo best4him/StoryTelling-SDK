@@ -13,6 +13,7 @@ import android.widget.ImageView;
 
 import com.andrei.storytelling.BookParser.OnInitCompleted;
 import com.andrei.storytelling.controllers.BookController;
+import com.andrei.storytelling.pages.PagesActivity;
 
 public abstract class StoryTelling extends FragmentActivity {
 

@@ -46,6 +46,7 @@ public class CommonAnimation {
 		}
 
 		if (repeatMode != 0) {
+			// Animation.REVERSE = 2
 			animation.setRepeatMode(repeatMode);
 		}
 

@@ -65,7 +65,6 @@ public class MyTranslateAnimation extends TranslateAnimation  {
 				fromYValue, toYType, toYValue);
 
 		CommonAnimation.setCommonFields(translateAnimation, object);
-		
 		return translateAnimation;
 	}
 }

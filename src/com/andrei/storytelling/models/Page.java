@@ -13,17 +13,23 @@ import com.andrei.storytelling.util.Tools;
 
 public class Page {
 
-	private String background;
-	private List<Sprite> sprites;
-	private TextBoxModel textBoxes;
+	private final String background;
+	private final List<Sprite> sprites;
+	private final TextBoxModel textBoxes;
 	
 	public TextBoxModel getTextBoxes() {
 		return textBoxes;
 	}
 	
-	private String textSound;
+	private final String textSound;
+	private final int duration;
+	
+	public int getDuration() {
+		return duration;
+	}
+
 	public static int  contor = 0;
-	private Page( ) {}
+
 	public static class Builder {
 		
 		// required parameter
@@ -32,7 +38,8 @@ public class Page {
 		// optional parameters
 		private List<Sprite> sprites = null;
 		private String textSound = null;
-		
+		private TextBoxModel mTextBoxes;
+		private int mDuration;
 		public Builder (String background) {
 			this.background = background;	
 		}
@@ -46,6 +53,14 @@ public class Page {
 			this.textSound = textSound;
 			return this;
 		}
+		public Builder duration (int duration) {
+			this.mDuration = duration;
+			return this;
+		}
+		public Builder textBox (TextBoxModel textBoxes) {
+			this.mTextBoxes = textBoxes;
+			return this;
+		}
 		
 		public Page build () {
 			return new Page(this);
@@ -57,6 +72,8 @@ public class Page {
 		this.background = builder.background;
 		this.sprites = builder.sprites;
 		this.textSound = builder.textSound;
+		this.textBoxes = builder.mTextBoxes;
+		this.duration = builder.mDuration;
 	}
 	
 	public String getBackground() {
@@ -74,11 +91,13 @@ public class Page {
 		
 		if (object == null) return null;
 		
-		Page page = new Page();
-		page.background = object.optString("background");
-		page.textSound = object.optString("sound");
-		
+		Page.Builder builder = new Page.Builder(object.optString("background"));
+
+		builder = builder.textSound(object.optString("sound"));
+		builder = builder.duration(object.optInt("duration"));
 		JSONArray spritesJson = object.optJSONArray("sprites");
+		
+		
 		// text Box json
 		JSONObject textBoxesJson = object.optJSONObject("text_box");
 		
@@ -87,17 +106,20 @@ public class Page {
 			for (int i = 0, n = spritesJson.length(); i < n; i++) {
 				sprites.add(Sprite.getSprite(spritesJson.optJSONObject(i)));
 			}
-			page.sprites = sprites;
+			builder = builder.sprites(sprites);
+//			page.sprites = sprites;
 		} else {
-			page.sprites = new ArrayList<>();
+			List<Sprite> sprites = new ArrayList<>();
+			builder = builder.sprites(sprites);		
 		}
 		
 		if (textBoxesJson != null) {	
-			page.textBoxes = TextBoxModel.getTextBoxModel(textBoxesJson);			
+			builder = builder.textBox(TextBoxModel.getTextBoxModel(textBoxesJson));	
+					
 		} else {
 //			page.textBoxes =TextBoxModel.noBox();
 		}
-		return page;
+		return builder.build();
 	}
 	public FXPlayer getFxPlayer (Context context) {
 		FXPlayer player = new FXPlayer(context);

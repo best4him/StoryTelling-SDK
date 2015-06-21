@@ -11,6 +11,7 @@ import android.content.Context;
 
 import com.andrei.storytelling.BookParser;
 import com.andrei.storytelling.ScreenSettings;
+import com.andrei.storytelling.language.LanguageController;
 import com.andrei.storytelling.models.Book;
 import com.andrei.storytelling.models.Image;
 import com.andrei.storytelling.models.Menu;
@@ -63,6 +64,13 @@ public class BookController {
 			JSONObject menuJson = jsonBook.getJSONObject("body").optJSONObject("menu");
 			JSONArray navigationJson = jsonBook.getJSONObject("body").optJSONArray("navigation");
 			JSONArray pagesJson = jsonBook.getJSONObject("body").optJSONArray("pages");
+			
+			// set languages
+			JSONArray languagesJson = jsonBook.optJSONArray("languages");
+			
+			//this must be  first object created, because, rest of the application will use
+			//the a specific languages text
+			LanguageController.INSTANCE.parseLanguages(languagesJson,context);
 			
 			double width = headerJson.getDouble("default_width");
 			double height = headerJson.getDouble("default_heigt");
@@ -117,7 +125,7 @@ public class BookController {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		
+			
 		myBook = bookBuilder.build();
 		
 		listener.OnModelLoadedComplete();

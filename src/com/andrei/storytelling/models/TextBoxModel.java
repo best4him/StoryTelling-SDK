@@ -291,7 +291,7 @@ public class TextBoxModel {
 		JSONArray tbArrayJson = tbJsonObject.optJSONArray("text_box_values");
 
 		List<TextBoxItem> tbItems = new ArrayList<>();
-
+	
 		builder = builder.xPosition(tbAttribJson.optInt("xPosition"));
 		builder = builder.yPosition(tbAttribJson.optInt("yPosition"));
 		builder = builder.radius(tbAttribJson.optInt("radius"));
@@ -305,6 +305,7 @@ public class TextBoxModel {
 		builder = builder.font(tbAttribJson.optString("font"));
 		builder = builder.externalFont(tbAttribJson.optString("external_font"));
 //		default_animation_duration
+		
 //		add textBox sequence
 		List<TextBoxItem> boxes = new ArrayList<TextBoxItem>();
 		for (int i = 0, n = tbArrayJson.length(); i < n; i++) {

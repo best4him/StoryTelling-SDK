@@ -20,7 +20,14 @@ public class MusicPlayer {
 		
 		return mPlayer;
 	}
+	
+	public static MusicPlayer createFromFile(Context context, String songName) {
 
+		MusicPlayer mPlayer = new MusicPlayer();
+		mPlayer.player = MediaPlayer.create(context, Tools.getSong(context, songName));
+		
+		return mPlayer;
+	}
 	public  boolean isPlaying() {
 		if (this.player != null) {
 			return this.player.isPlaying();
@@ -71,7 +78,7 @@ public class MusicPlayer {
 	 *  from where it was paused. If playback had been stopped, or never started before, playback will start at the beginning.
 	 */
 	public  void play() {
-		System.out.println("ttt player: " + player);
+		
 		if (player == null) {
 			return;
 		}

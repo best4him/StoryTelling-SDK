@@ -25,8 +25,18 @@ public class Sprite {
 	private int yPosition;
 	private SoundModel sound;
 	private int soundId;
+	private boolean draggable;
+	private int trigerOffset;
 	private FrameAnimation dAnimation;
 	
+	public int getTrigerOffset() {
+		return trigerOffset;
+	}
+
+	public boolean isDraggable() {
+		return draggable;
+	}
+
 	public FrameAnimation getdAnimation() {
 		return dAnimation;
 	}
@@ -89,6 +99,8 @@ public class Sprite {
 		sprite.xPosition = object.optInt("xPosition");
 		sprite.yPosition = object.optInt("yPosition");
 		sprite.name = object.optString("name");
+		sprite.draggable = object.optBoolean("draggable");
+		sprite.trigerOffset = object.optInt("triger_offset");
 		sprite.animations = Sprite.getSpriteAnimation(object.optJSONArray("animations"));
 		sprite.sound = SoundModel.getSoundModel(object.optJSONObject("sound"));
 		sprite.dAnimation = FrameAnimation.getFrameAnimation(object.optJSONObject("frame_animation"));

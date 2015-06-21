@@ -13,7 +13,10 @@ public class SoundModel {
 	public int getLoop() {
 		return loop;
 	}
-
+	
+	public void setName(String name) {
+		this.name = name;
+	}
 	private SoundModel (){};
 	
 	public static SoundModel getSoundModel(JSONObject object) {
