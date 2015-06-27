@@ -31,6 +31,7 @@ import com.andrei.storytelling.models.ButtonModel;
 import com.andrei.storytelling.models.NavigationModel;
 import com.andrei.storytelling.models.Page;
 import com.andrei.storytelling.music.MusicPlayer;
+import com.andrei.storytelling.util.ReadingType;
 import com.andrei.storytelling.util.Tools;
 
 public class PagesActivity extends FragmentActivity   {
@@ -63,30 +64,31 @@ public class PagesActivity extends FragmentActivity   {
 		
 		container.setBackgroundColor(Color.BLACK);
 		
-
+		System.out.println("lll on Create" );
 		//get extra
 
 		
-		if (savedInstanceState == null) {
-			Bundle extras = getIntent().getExtras();
-			
-			if (extras == null) {
-				optionButton = -1;
-			} else {
-			
-				optionButton = extras.getInt("action");
-			}
-		} else {
-			
-			optionButton = Integer.parseInt((String)savedInstanceState.getSerializable("action"));
-		}
-		
+//		if (savedInstanceState == null) {
+//			Bundle extras = getIntent().getExtras();
+//			
+//			if (extras == null) {
+//				optionButton = -1;
+//			} else {
+//			
+//				optionButton = extras.getInt("action");
+//			}
+//		} else {
+//			
+////			optionButton = Integer.parseInt((String)savedInstanceState.getSerializable("action"));
+//		}
+		optionButton = ReadingType.userChoice;
 		
 		mPager = (NonSwipeableViewPager) findViewById(R.id.viewPager);
 		mPager.setPageTransformer(true, new AlphaPageTransformer());
 		mPager.setPageMargin(0);
 		mPager.setScrollDurationFactor(15);
 		mPager.setOffscreenPageLimit(0);
+		
 		myPagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
 		mPager.setAdapter(myPagerAdapter);
 		
@@ -130,13 +132,16 @@ public class PagesActivity extends FragmentActivity   {
 							if (mPager.getCurrentItem() < BookController.getInstance().getPages().size()-1) {
 								nextButtonPressed();
 							} else {
-								PagesActivity.this.onBackPressed();
+								ReplyDialog rDialog = new ReplyDialog(PagesActivity.this);
+								rDialog.show();
+//								PagesActivity.this.onBackPressed();
 							}
 							
 							break;
 						}
 					}
 				});
+				
 				frame.addView(image, option.getParams());
 			}
 			container.addView(frame, ScreenSettings.getFrameParams());
@@ -199,7 +204,13 @@ public class PagesActivity extends FragmentActivity   {
 		if (handler != null)
 			handler.removeCallbacksAndMessages(null);
 	}
-	
+	@Override
+	protected void onDestroy() {
+		
+		System.out.println("lll on onDestroy" );
+		mPager = null;
+		super.onDestroy();
+	}
 	private class MyPagerAdapter extends FragmentPagerAdapter {
 
 		public MyPagerAdapter(FragmentManager fm) {
@@ -232,6 +243,7 @@ public class PagesActivity extends FragmentActivity   {
 	}
 
 	private void playBackgroundSound(int position) {
+		// not read by myself
 		if (optionButton != 2) {
 			if (mPlayer != null) {
 				mPlayer.release();
@@ -260,13 +272,13 @@ public class PagesActivity extends FragmentActivity   {
  }
     @Override
     public void onBackPressed() {
-    	
-    	
+    	    	
 		if (mPlayer != null) {
 			mPlayer.release();
 		}
 		if (handler != null)
 			handler.removeCallbacksAndMessages(null);
+		
     	super.onBackPressed();
     	
     }

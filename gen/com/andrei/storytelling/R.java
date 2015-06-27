@@ -1636,9 +1636,11 @@ containing a value of this type.
         public static int abc_textfield_search_material=0x7f020032;
         public static int bgl=0x7f020033;
         public static int bgr=0x7f020034;
-        public static int home=0x7f020035;
-        public static int ic_launcher=0x7f020036;
-        public static int replay=0x7f020037;
+        public static int header_s=0x7f020035;
+        public static int home=0x7f020036;
+        public static int ic_launcher=0x7f020037;
+        public static int kids_header=0x7f020038;
+        public static int replay=0x7f020039;
     }
     public static final class id {
         public static int action_bar=0x7f090031;

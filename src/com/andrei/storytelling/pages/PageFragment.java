@@ -202,8 +202,15 @@ public class PageFragment extends Fragment implements FragmentLifecycle {
 	}
 @Override
 public void onDestroy() {
-	super.onDestroy();
+	System.out.println("lll Fragment on onDestroy" );
+	
+	if (ReadingType.userChoice == 3 ) {
+		for (CustomImageView image : images) {
+			image.endAnim();
+		}
+	}
 	releaseResources();
+	super.onDestroy();
 }
 	@Override
 	public void onPauseFragment() {

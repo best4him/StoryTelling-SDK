@@ -115,9 +115,13 @@ public class CustomImageView extends ImageView {
 		
 		
 			actionHandler = new Handler();
-			System.out.println("uuu: " +sprite.getName() +"-" + sprite.getTrigerOffset() );
 			actionHandler.postDelayed(actionRunable, sprite.getTrigerOffset());
 		
+	}
+	public void endAnim() {
+		if (actionHandler != null) {
+			actionHandler.removeCallbacksAndMessages(null);
+		}
 	}
 	
 	class Starter implements Runnable {
